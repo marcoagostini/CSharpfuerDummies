@@ -1,0 +1,85 @@
+\section{Reflection}
+Unter Reflection versteht man die Analyse von Metadaten eines Objekts zur Laufzeit. Mit Reflection lassen sich Typen suchen und instanzieren. Die abstrakte Basisklasse System.Type representiert einen Typen. System.RuntimeType erbt von System.Type. Mit Reflection können auch \lstinline{private} Felder gelesen und geschreiben werden.
+
+\subsection{Type-Discovery}
+Suche aller Typen in einem Assembly.
+
+\begin{lstlisting}
+Assembly a01 = Assembly.Load("mscorlib"); 
+
+Type[] t01 = a01.GetTypes(); 
+foreach (Type type in t01) 
+{
+	Console.WriteLine(type); 
+	MemberInfo[] mInfos = type.GetMembers(); 
+	foreach (var mi in mInfos) 
+	{
+		Console.WriteLine(
+			"\t{0}\t{1}", 
+			mi.MemberType, 
+			mi);
+	}
+}
+\end{lstlisting}
+
+\subsection{Member auslesen}
+
+\begin{lstlisting}
+Type type = typeof(Counter); 
+MemberInfo[] miAll = type.GetMembers(); 
+foreach (MemberInfo mi in miAll) 
+{
+	Console.WriteLine(
+	"{0} is a {1}",
+	mi, mi.MemberType);
+} 
+Console.WriteLine("----------"); 
+PropertyInfo[] piAll = type.GetProperties(); 
+foreach (PropertyInfo pi in piAll) 
+{
+	Console.WriteLine(
+	"{0} is a {1}",
+	pi, pi.PropertyType);
+}
+
+// Filter members according to BindingFlag or FilterName
+Type type = typeof(Assembly); BindingFlags bf =
+   BindingFlags.Public |
+   BindingFlags.Static |
+   BindingFlags.NonPublic |
+   BindingFlags.Instance |
+   BindingFlags.DeclaredOnly;
+
+System.Reflection.MemberInfo[] miFound = type.FindMembers(
+	MemberTypes.Method, bf, Type.FilterName, "Get*"
+);
+\end{lstlisting}
+
+\subsection{Field Information}
+Die Field Info beschreibt ein Feld einer Klasse (Name, Typ, Sichtbarkeit). Die Felder können mit \lstinline{object GetValue(object obj)} und \lstinline{void SetValue(object obj, object value)} auch gelesen und geschrieben werden.
+
+\subsection{Property Info}
+Die Property Info beschreibt eine Property einer Klasse (Name, Typ, Sichtbarkeit, Informationen zu Get/Set). Auch Properties lassen sich lesen und schreiben.
+
+\subsection{Mehtod Info}
+Die Method Info beschreibt eine Methode einer Klasse (Name, Parameter, Rückgabewert, Sicht- barkeit). Sie leitet von Klasse MethodBase ab. Die Methode wird mit Invoke() aufgerufen.
+
+\subsection{Constructor Info}
+Die Constructor Info beschreibt ein Konstruktor einer Klasse (Name, Parameter, Sichtbarkeit). Wie Method Info leitet er wegen seinen ähnlichen Eigenschaften von MethodBase ab und wird mit Invoke() aufgerufen.
+
+
+\section{Attributes}
+Attribute bieten die Möglichkeit, Informationen in deklarativer Form mit Code zu verknüpfen. Attribute können außerdem als wiederverwendbare Elemente genutzt werden, die auf eine Vielzahl von Zielen angewendet werden können.
+
+\subsection{Anwendungfälle}
+\begin{itemize}
+  \itemsep -0.5em 
+  \item Object-relationales Mapping
+  \item Serialisierung (WCF, XML)
+  \item Security und Zugriffssteuerung
+  \item Dokumentation
+\end{itemize}
+
+\subsection{Custom Attributes}
+
+

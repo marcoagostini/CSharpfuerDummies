@@ -1,0 +1,33 @@
+\section{Tasks}
+Leichtgewichtige Variante eines Threads und repräsentiert eine asynchrone Operation. 
+
+\begin{minipage}{0,5\linewidth}
+\textbf{Task}  
+\begin{itemize}
+  \itemsep -0.5em 
+  \item Hat einen Rückgabewert
+  \item Unterstützt "Cancellation" via Token
+  \item Mehrere parallele Operationen in einem Task
+  \item Vereinfachter Programmfluss (async/wait)
+  \item Verwendet einen Thread Pool
+  \item Eher ein High level Konstrukt
+\end{itemize}
+\end{minipage}
+\begin{minipage}{0,5\linewidth}
+\textbf{Thread}   
+\begin{itemize}
+  \itemsep -0.5em 
+  \item Kein Rückgabewert (Alternativen aber möglich)
+  \item Keine "Cancellation"
+  \item Nur eine Operation in einem Thread
+  \item Keine Unterstützung for async/wait.
+  \item Thread Pool muss explizit (manuell) verwendet werden.
+  \item Low Level Konstrukt
+\end{itemize}
+
+\end{minipage}
+
+
+% TODO extend tasks
+
+\pagebreak

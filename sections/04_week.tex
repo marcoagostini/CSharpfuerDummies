@@ -1,0 +1,38 @@
+\section{Vererbung}
+\begin{description}
+  \item[virtual] Erlaubt die Überschreibung einer Methode, Property, Indexer, Event mittels override.
+  \item[override] Überschreibt explizit die vererbte Methode, Property, Indexer, Event. Ohne Override wird Dynamic Binding unterbrochen.
+  \item[new] Unterbricht Dynamic Binding und definiert Methode, Property, Indexer, Event neu. 
+\end{description}
+
+\begin{lstlisting}
+class Vehicle {
+    public virtual void WhoAreYou() { Console.WriteLine("Vehicle"); }
+}
+class Car : Vehicle  {
+    public override void WhoAreYou() { Console.WriteLine("Car"); }
+}
+class Racecar : Car {
+    public new virtual void WhoAreYou() { Console.WriteLine("Racecar"); }
+}
+class F1car : Racecar {
+    public override void WhoAreYou() { Console.WriteLine("F1car"); }
+}
+\end{lstlisting}
+
+\subsection{Interfaces}
+\begin{lstlisting}
+interface ISequence {
+	void Add(object x); // Method 
+	string Name { get; } // Property 
+	object this[int i] { get; set; } // Indexer 
+	event EventHandler OnAdd; // Event 
+}
+
+class List : ISequence {
+	public void Add(object x) { /* ... */ }
+	public string Name { get { /* ... */ } }
+	public object this[int i] { get { /* ... */ } set { /* ... */ } } 
+	public event EventHandler OnAdd;
+}
+\end{lstlisting}

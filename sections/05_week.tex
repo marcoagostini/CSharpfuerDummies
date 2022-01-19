@@ -1,0 +1,128 @@
+\section{Delegates}
+Ein Delegate verbindet einen Aufrufer zur Laufzeit mit seiner Zielmethode.
+
+\begin{lstlisting}
+delegate int Comparer(object x, object y);
+class Car
+{
+    public string Brand { get; }
+    public int EngineSize { get; set; }
+    public int WheelSize { get; set; }
+
+    public Car (string Brand, int EngineSize, int WheelSize)
+    {
+        this.Brand = Brand;
+        this.EngineSize = EngineSize;
+        this.WheelSize = WheelSize;
+    }
+
+    public static int CompareEngine(object x, object y)
+    {
+        Car c1 = (Car)x;
+        Car c2 = (Car)y;
+        if (c1.EngineSize < c2.EngineSize) return -1;
+        else if (c1.EngineSize > c2.EngineSize) return 1;
+        else return 0;
+    }
+
+    public static void CompareCar(Car x, Car y, Comparer compare)
+    {
+        int result = compare(x, y);
+        Console.WriteLine(result);
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Car c1 = new Car("Ferrari", 4, 20);
+        Car c2 = new Car("Lamborghini", 12, 20);
+        Car.CompareCar(c1, c2, Car.CompareEngine);
+    }
+}
+\end{lstlisting}
+
+
+\subsection{Multicast Delegate}
+Jedes Delegate ist auch ein Multicast Delegate.
+\begin{lstlisting}
+public delegate void Notifier(string Person);
+
+class Person
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+
+    public static void sayHi(string sender)
+    {
+        Console.WriteLine("Hello {0}", sender);
+    }
+
+    public static void sayCiao(string sender)
+    {
+        Console.WriteLine("Ciao {0}", sender);
+    }
+}
+static void Main(string[] args)
+{
+    Notifier n1 = sayHi;
+    n1 += sayCiao;
+    n1 += sayCiao;
+    n1.Invoke("Marco Agostini");
+}
+\end{lstlisting}
+
+
+\section{Events}
+\begin{lstlisting}
+   // 1. Define Delegate
+   public delegate void RaceEventHandler(object source);
+
+   // 2. Define Publisher
+   public class RaceController
+   {
+      // 3. Define an event based on Delegate
+      public event RaceEventHandler RaceChangeEvent;
+      public void ChangeRaceState()
+      {
+         RaceChangeEvent?.Invoke(this);
+      }
+   }
+    
+   // 5. Write Subscribers
+   public class Car
+   {
+      public int number { get; }
+      public bool IsRunning { get; set; } = false;
+      public Car(int number) { this.number = number; }
+      public void ChangeCarState(object source)
+      {
+         if (!IsRunning)
+         {
+            IsRunning = true;
+            Console.WriteLine("Car with number {0} has started", number);
+         } else {
+            IsRunning = false;
+            Console.WriteLine("Car with number {0} has stopped", number);
+         }
+      }
+   }
+
+   public static void Main(string[] args)
+   {
+      RaceController rh1 = new RaceController();
+      Car c1 = new Car(1);
+      Car c2 = new Car(2);
+
+      // Add Subscribers to Event
+      rh1.RaceChangeEvent += c1.ChangeCarState;
+      rh1.RaceChangeEvent += c2.ChangeCarState;
+      
+      rh1.ChangeRaceState();
+      rh1.ChangeRaceState();
+
+      rh1.RaceChangeEvent -= c1.ChangeCarState;
+      rh1.RaceChangeEvent -= c2.ChangeCarState;
+   }
+\end{lstlisting}

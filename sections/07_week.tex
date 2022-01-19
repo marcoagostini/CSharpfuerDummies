@@ -1,0 +1,112 @@
+\section{Exceptions}
+
+\begin{lstlisting}
+try
+{
+    d3 = Convert.ToDouble("12355555555555555555555555555555555555");
+}
+catch (FormatException ex)
+{
+    Console.WriteLine($"{ex.GetType().FullName} occured.");
+}
+catch (OverflowException ex)
+{
+    Console.WriteLine($"{ex.GetType().FullName} occured.");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"{ex.GetType().FullName} occured.");
+}
+\end{lstlisting}
+
+
+\section{Iteratoren}
+
+\subsection{ForEach}
+Der ForEach Loop ist ein reines Compiler-Feature. Benötigt die Implementation von \lstinline{IEnumerator, IEnumerable} auf der Klasse.
+\begin{lstlisting}
+foreach (ElementType elem in collection){ statement };
+\end{lstlisting}
+
+\begin{lstlisting}
+int[] list = { 1, 2, 3, 4, 5, 6 }; 
+foreach (int i in list) {
+	if (i == 3) continue; 
+	if (i == 5) break; 
+	Console.WriteLine(i);
+}
+// Compiler Output
+IEnumerator enumerator = list.GetEnumerator(); 
+try {
+	while (enumerator.MoveNext()) {
+		int i = (int)enumerator.Current; 
+		if (i == 3) continue; 
+		if (i == 5) break; 
+		Console.WriteLine(i);
+	}
+} finally {
+	IDisposable disposable = enumerator as IDisposable;
+	if (disposable != null) {
+		disposable.Dispose();
+	}
+}
+\end{lstlisting}
+
+
+\subsection{Enumartion}
+\textbf{IEnumerable:} ist ein Interface, das die Methode GetEnumerator definiert, dieser hat den Typ IEnumerator.
+\textbf{IEnumerator:} ist ein Interface, welches über die Elemente einer Collection iteriert Funktionen: \lstinline{ MoveNext(), Reset()} enthält.
+
+\begin{lstlisting}
+CityCollection myColl = new CityCollection();
+
+foreach (string s in myColl)
+{
+    Console.WriteLine(s);
+}
+// Compiler output
+var enumerator = myColl.GetEnumerator();
+while (enumerator.MoveNext())
+{
+    Console.WriteLine(enumerator.Current);
+}
+
+// Definition der Collection
+public class CityCollection : IEnumerable<string>
+{
+    private string[] cities = { "Bern", "Basel", "Zuerich", "Rapperswil"};
+    public IEnumerator<string> GetEnumerator()
+    {
+        for (int i = 0; i < cities.Length; i++) yield return cities[i];
+    }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+}
+\end{lstlisting}
+
+\subsection{Extension Methods}
+
+\begin{lstlisting}
+public static class Extensions
+{
+    public static IEnumerable<int> OstMultipleOf(this IEnumerable<int> source, int factor)
+    {
+        foreach (int item in source)
+            if (item % factor == 0) yield return item;      
+    }
+}
+
+int[] numbers = { 1, 4, 2, 9, 13, 8, 9, 0, -6, 12 };
+IEnumerable<int> multipleof4 = numbers.OstMultipleOf(4);
+foreach (int i in multipleof4) { Console.WriteLine(i); }
+\end{lstlisting}
+
+
+
+
+
+
+
+

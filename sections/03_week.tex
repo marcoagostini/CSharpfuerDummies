@@ -1,0 +1,48 @@
+\section{Klassen \& Structs}
+\subsection{Constructor}
+\begin{lstlisting}
+class Book {
+	private string title;
+	private string author;
+	private bool available;	
+	public Book(string title, string author, bool available) {
+		this.title = title;
+		this.author = author;
+		this.available = available;
+    }
+	public Book(string title, string author) : this(title, author, true) { }
+	public Book(string title) : this (title, "anonymous") { }
+	public Book() : this("untitled") { }
+}
+\end{lstlisting}
+
+\subsection{Indexer}
+\begin{lstlisting}
+class BookList {
+	private string[,] books = {
+		{"The Green Mile", "Stephen King"},
+		{"It", "Stephen King"},
+		{"Misery", "Stephen King"},
+		{"The Raven", "Edgar Allan Poe"}
+	};
+	public string this[int index] => $"title: {books[index, 0]} / author: {books[index, 1]}";
+}
+\end{lstlisting}
+
+\subsection{Operator}
+\begin{lstlisting}
+class Vector {
+	public int X { get; set; }
+	public int Y { get; set; }
+	public Vector(int x, int y) {
+		X = x;
+		Y = y;
+	}
+	public static Vector operator +(Vector v1, Vector v2) {
+		return new Vector(v1.X + v2.X, v1.Y + v2.Y);
+	}
+}
+\end{lstlisting}
+
+\subsection{Properties}
+
